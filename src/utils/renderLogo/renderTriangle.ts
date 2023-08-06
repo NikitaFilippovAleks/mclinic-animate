@@ -1,5 +1,5 @@
 import { logoData } from "./data";
-import { ITriangle } from "./types";
+import { ITriangle, ITriangleRandomized } from "./types";
 
 const renderTriangle = (
   canvas: HTMLCanvasElement,
@@ -9,8 +9,10 @@ const renderTriangle = (
       initial,
       final
     },
-    invert
-  }: ITriangle,
+    invert,
+    scale: elementInitialScale,
+    additionalOffset
+  }: ITriangleRandomized,
   progress: number
 ) => {
   const {
@@ -18,11 +20,13 @@ const renderTriangle = (
     height: logoHeight,
     elementHeight,
     elementWidth,
-    elementInitialScale,
+    // elementInitialScale,
     marginBottom
   } = logoData;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
+
+  // const elementInitialScale = invert ? 3 : 2;
 
   const canvasWidth = canvas.width;
   const canvasHeight = canvas.height;
@@ -37,8 +41,8 @@ const renderTriangle = (
   const isLeftPart = initial.x <= 0.5;
   const isUpPart = initial.y <= 0.5;
 
-  const initialOffsetX = isLeftPart ? -(elementWidth * elementInitialScale) : 0;
-  const initialOffsetY = isUpPart ? -(elementHeight * elementInitialScale) : 0;
+  const initialOffsetX = isLeftPart ? -(elementWidth * elementInitialScale + additionalOffset) : additionalOffset;
+  const initialOffsetY = isUpPart ? -(elementHeight * elementInitialScale + additionalOffset) : additionalOffset;
 
   const initialX = canvasWidth * initial.x + initialOffsetX;
   const initialY = canvasHeight * initial.y + initialOffsetY;
@@ -62,7 +66,7 @@ const renderTriangle = (
   ctx.translate(currentX, currentY);
 
   const scaleDelta = elementInitialScale - 1;
-  ctx.scale(1 + (scaleDelta * (1 - progress)), 1 + (scaleDelta * (1 - progress)))
+  ctx.scale(1 + (scaleDelta * (1 - progress)), 1 + (scaleDelta * (1 - progress)));
   
   if (invert) {
     ctx.rotate(Math.PI)
@@ -77,8 +81,6 @@ const renderTriangle = (
   
   ctx.fillStyle = color;
   ctx.fill();
-
-
 
   ctx.restore();
 }

@@ -11,3 +11,8 @@ export interface ITriangle {
   }
   invert: boolean;
 }
+
+export interface ITriangleRandomized extends ITriangle {
+  scale: number;
+  additionalOffset: number;
+}

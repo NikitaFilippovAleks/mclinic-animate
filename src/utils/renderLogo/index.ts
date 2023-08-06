@@ -2,6 +2,7 @@ import renderTriangle from "./renderTriangle";
 import { logoData, triangles } from "./data";
 import renderIcon from "./renderIcon";
 import ImageMetaclinic from './ImageMetaclinic.png';
+import randomizeTriangleRender from "./randomizeTriangleRender";
 
 function easeInOut(timeFraction: number) {
   return Math.pow(timeFraction, 2) * (3 - 2 * timeFraction);
@@ -11,6 +12,8 @@ const renderLogo = (canvas: HTMLCanvasElement) => {
   const { renderDuration } = logoData;
   const imgMetaclinic = new Image()
   imgMetaclinic.src = ImageMetaclinic
+
+  const randomisedTriangles = randomizeTriangleRender(triangles);
 
   imgMetaclinic.onload = () => {
     const startTime = performance.now();
@@ -28,7 +31,7 @@ const renderLogo = (canvas: HTMLCanvasElement) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Отрисовка элементов логотипа
-      triangles.forEach(rect => renderTriangle(canvas, rect, progress));
+      randomisedTriangles.forEach(rect => renderTriangle(canvas, rect, progress));
       // Отрисовка картинки логотипа
       renderIcon(canvas, imgMetaclinic, progress);
   
